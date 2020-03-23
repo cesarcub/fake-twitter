@@ -50,6 +50,11 @@ async function findAllUser(req, res) {
     }
 }
 
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ */
 async function findUserById(req, res) {
     try {
         const { idUser } = req.params;
@@ -71,6 +76,38 @@ async function findUserById(req, res) {
     }
 }
 
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ */
+async function deleteUser(req, res) {
+    try {
+        const { idUser } = req.params;
+        const user = await dbManager.User.destroy({
+            where: {
+                idUser: idUser
+            }
+        });
+        
+        if(user){
+            res.send({
+                message: `Usuario con ID ${idUser} eliminado con éxtio`
+            });
+        }
+        else{
+            res.status(404).send({
+                message: 'Usuario no existe'
+            });
+        }
+    } catch (error) {
+        res.status(500).send({
+            message: 'Error interno al eliminar usuario'
+        });
+    }
+}
+
 exports.createUser = createUser;
 exports.findAllUser = findAllUser;
 exports.findUserById = findUserById;
+exports.deleteUser = deleteUser;
