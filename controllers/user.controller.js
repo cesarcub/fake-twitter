@@ -14,7 +14,8 @@ function createUser(req, res) {
     }
 
     const newUserObject = {
-        username: req.body.username
+        username: req.body.username,
+        password: req.body.password
     }
 
     dbManager.User.create(newUserObject).then(data => {
@@ -89,13 +90,13 @@ async function deleteUser(req, res) {
                 idUser: idUser
             }
         });
-        
-        if(user){
+
+        if (user) {
             res.send({
                 message: `Usuario con ID ${idUser} eliminado con éxtio`
             });
         }
-        else{
+        else {
             res.status(404).send({
                 message: 'Usuario no existe'
             });
@@ -107,7 +108,33 @@ async function deleteUser(req, res) {
     }
 }
 
+/**
+ * 
+ * @param {*} res 
+ * @param {*} req 
+ */
+async function login(req, res) {
+    try {
+        const { username, password } = req.body;
+        const user = await dbManager.User.findOne({
+            where: {
+                username,
+                password
+            }
+        });
+
+        res.send({
+            authenticate: user ? true : false
+        });
+    } catch (error) {
+        res.status(500).send({
+            message: 'Error interno al hacer login'
+        });
+    }
+}
+
 exports.createUser = createUser;
 exports.findAllUser = findAllUser;
 exports.findUserById = findUserById;
 exports.deleteUser = deleteUser;
+exports.login = login;
