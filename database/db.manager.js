@@ -10,8 +10,8 @@ const User = UserModel(sequelizeCx, Sequelize);
 const Post = PostModel(sequelizeCx, Sequelize);
 
 //Se relacionan
-User.hasMany(Post, { foreignKey: 'idPost', sourceKey: 'idUser' });
-Post.belongsTo(User, { foreignKey: 'idUser', sourceKey: 'idPost' });
+User.hasMany(Post, { foreignKey: 'idUser', sourceKey: 'idUser' });
+Post.belongsTo(User, { foreignKey: 'idUser', sourceKey: 'idUser' });
 
 const models = {
     User,
