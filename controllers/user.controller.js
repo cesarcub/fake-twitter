@@ -133,8 +133,61 @@ async function login(req, res) {
     }
 }
 
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ */
+async function listFollowers(req, res) {
+    try {
+        const { idUser } = req.params;
+        const followers = await dbManager.User.findOne({
+            attributes: ['username'],
+            include: {
+                attributes: ['username'],
+                model: dbManager.User,
+                as: 'Followers'
+            },
+            where: {
+                idUser: idUser
+            }
+        });
+        res.send(followers);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            message: 'Error interno al traer seguidores'
+        });
+    }
+}
+
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ */
+async function createFollower(req, res) {
+    try {
+        const { idUser, FollowerIdUser } = req.body;
+
+        const user = await dbManager.User.findOne({
+            where: {
+                idUser: idUser
+            }
+        });
+        const follower = await user.addFollower(FollowerIdUser);
+        res.send(follower);
+    } catch (error) {
+        res.status(500).send({
+            message: 'Error interno al crear seguidor'
+        });
+    }
+}
+
 exports.createUser = createUser;
 exports.findAllUser = findAllUser;
 exports.findUserById = findUserById;
 exports.deleteUser = deleteUser;
 exports.login = login;
+exports.listFollowers = listFollowers;
+exports.createFollower = createFollower;

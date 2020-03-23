@@ -9,9 +9,13 @@ const PostModel = require('../models/post.model');
 const User = UserModel(sequelizeCx, Sequelize);
 const Post = PostModel(sequelizeCx, Sequelize);
 
-//Se relacionan
+//Se relacionan usuarios y tweets
 User.hasMany(Post, { foreignKey: 'idUser', sourceKey: 'idUser' });
 Post.belongsTo(User, { foreignKey: 'idUser', sourceKey: 'idUser' });
+
+//Se relacionan usuarios con usuarios para hacer followers
+User.belongsToMany(User, { as: 'Followers', through: 'followers', foreignKey: 'idUser' });
+
 
 const models = {
     User,

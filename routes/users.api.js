@@ -17,4 +17,10 @@ router.delete('/:idUser', userController.deleteUser);
 /* Login */
 router.post('/login', userController.login);
 
+/* List followers */
+router.get('/followers/:idUser', userController.listFollowers);
+
+/* Create follower */
+router.post('/follower', userController.createFollower);
+
 module.exports = router;
